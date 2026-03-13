@@ -1,16 +1,33 @@
 #!/bin/bash
 # Completion verifier — checks modified files for quality before Claude stops
-# Event: Stop | Type: agent
+# Event: Stop | Type: command
 # Exit 2 to block premature completion
 
-errors=""
+# Consume stdin (Stop hooks receive JSON input)
+input=$(cat)
 
-# Get list of modified files (staged + unstaged)
-# Check if we're in a git repo with at least one commit
+# Prevent infinite loops — if we already blocked once, let Claude stop
+stop_hook_active=$(echo "$input" | python3 -c "
+import sys, json
+try:
+    d = json.load(sys.stdin)
+    print(d.get('stop_hook_active', False))
+except:
+    print('False')
+" 2>/dev/null)
+
+if [ "$stop_hook_active" = "True" ] || [ "$stop_hook_active" = "true" ]; then
+  exit 0
+fi
+
+# Bail out if not in a git repo with at least one commit
 if ! git rev-parse --verify HEAD &>/dev/null; then
   exit 0
 fi
 
+errors=""
+
+# Get list of modified files (staged + unstaged)
 modified_files=$(git diff --name-only HEAD 2>/dev/null; git diff --name-only --cached 2>/dev/null)
 modified_files=$(echo "$modified_files" | sort -u | grep -v '^$')
 
@@ -56,8 +73,8 @@ if [ -n "$ts_files" ] && [ -f "tsconfig.json" ]; then
 fi
 
 if [ -n "$errors" ]; then
-  echo -e "COMPLETION BLOCKED — quality issues in modified files:\n\n$errors"
-  echo "Fix these before finishing."
+  echo -e "COMPLETION BLOCKED — quality issues in modified files:\n\n$errors" >&2
+  echo "Fix these before finishing." >&2
   exit 2
 fi
 
