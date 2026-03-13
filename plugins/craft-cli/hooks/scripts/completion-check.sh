@@ -6,6 +6,11 @@
 errors=""
 
 # Get list of modified files (staged + unstaged)
+# Check if we're in a git repo with at least one commit
+if ! git rev-parse --verify HEAD &>/dev/null; then
+  exit 0
+fi
+
 modified_files=$(git diff --name-only HEAD 2>/dev/null; git diff --name-only --cached 2>/dev/null)
 modified_files=$(echo "$modified_files" | sort -u | grep -v '^$')
 
