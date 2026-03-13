@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/scripts/pre-commit-validate.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/pre-commit-validate.sh"
           }
         ]
       },
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/scripts/secret-scanner.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/secret-scanner.sh"
           }
         ]
       }
@@ -26,7 +26,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/scripts/post-edit-test.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/post-edit-test.sh"
           }
         ]
       }
@@ -36,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/scripts/session-context.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-context.sh"
           }
         ]
       }
@@ -46,7 +46,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "hooks/scripts/completion-check.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/completion-check.sh"
           }
         ]
       }
