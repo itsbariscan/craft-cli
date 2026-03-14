@@ -1,6 +1,6 @@
 # craft-cli
 
-A developer workflow toolkit for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — seven skills that encode how good software gets shipped, and five hooks that enforce it automatically.
+A developer workflow toolkit for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — ten connected skills that chain together into a complete development workflow, one specialized agent, and five quality-gate hooks.
 
 > Quality is not a feature to be prioritized — it is the strategy.
 
@@ -10,11 +10,33 @@ A developer workflow toolkit for [Claude Code](https://docs.anthropic.com/en/doc
 claude plugin add itsbariscan/craft-cli
 ```
 
+## The Workflow
+
+Skills connect into a directed graph. The **golden path** flows top-to-bottom, but you can enter at any point:
+
+```
+/think (design)
+   ↓
+/plan (break into steps)
+   ↓
+implement (write code) ←── /docs (lookup APIs)
+   ↓
+/debug (if something breaks)
+   ↓
+/review (quality check)
+   ↓
+/ship (deliver)
+   ↓
+/qa (verify live)
+```
+
+Skills auto-trigger based on context — you don't need to memorize commands. After each skill completes, it recommends the next step and passes context forward through `.craft/context/`.
+
 ## Skills
 
 ### `/think` — Design Thinking
 
-Three-gear brainstorming for non-trivial decisions.
+Three-gear brainstorming for non-trivial decisions. Outputs ADRs (Architecture Decision Records).
 
 | Gear | When to use | What it does |
 |------|-------------|--------------|
@@ -27,17 +49,38 @@ Three-gear brainstorming for non-trivial decisions.
 /craft-cli:think reduce — we have 2 days, what ships?
 ```
 
+**Chains to:** `/plan` — "Design captured. Want to break this into implementation steps?"
+
+### `/plan` — Implementation Planning
+
+Turns designs into ordered, executable steps. Each step specifies what, where, how, and how to verify.
+
+```
+/craft-cli:plan add user avatar upload with S3
+```
+
+- Reads upstream context from `/think` automatically
+- Steps are independently verifiable and ordered by dependency
+- Includes risk assessment and explicit scope exclusions
+- Supports execution mode: say "let's go" to work through steps in order
+
+**Chains to:** Implementation — "Plan ready with N steps. Start implementing step 1?"
+
 ### `/review` — Pre-Landing Code Review
 
-Structured two-pass review against the target branch.
+Structured two-pass review with confidence scoring via the `code-reviewer` agent.
 
 **Pass 1 (Critical — blocks merge):** RLS bypass, auth boundary violations, unvalidated mutations, XSS vectors, exposed secrets, SQL injection, TOCTOU races, missing error handling at boundaries.
 
 **Pass 2 (Informational — noted):** Missing states (error/loading/empty), N+1 queries, dead code, accessibility gaps, performance concerns, stale SEO metadata.
 
+For branches with 5+ changed files, dispatches the `code-reviewer` agent for parallel analysis. Only surfaces findings with confidence ≥ 75/100.
+
 ```
 /craft-cli:review
 ```
+
+**Chains to:** `/ship` if clean — "Review clean. Ready to ship?"
 
 ### `/qa` — Live URL Testing
 
@@ -51,6 +94,8 @@ Chrome DevTools-powered QA with health scoring and regression tracking.
 
 Health score (0–100) weights: Functional 20%, Console 15%, Accessibility 15%, UX 15%, Visual 10%, Performance 10%, Links 10%, Content 5%.
 
+**Chains to:** `/debug` if issues found — "3 issues detected. Investigate?"
+
 ### `/ship` — Ship Workflow
 
 Full pipeline from feature branch to PR. Stops on failure at any step.
@@ -62,28 +107,33 @@ preflight → sync with main → build → test → eval gate → review → com
 ```
 /craft-cli:ship            # full pipeline
 /craft-cli:ship --dry-run  # steps 1-6 only, no commit/push/PR
+/craft-cli:ship --resume   # pick up where you left off
+/craft-cli:ship --hotfix   # skip eval gate for urgent fixes
 ```
 
-**Eval gate** triggers automatically when prompt/template/content files change — runs `/eval run` and checks pass rates against baseline.
+Reads upstream context from `/review` and `/eval` — won't re-run steps that already have results.
+
+**Chains to:** `/qa <url>` — "PR created. Test the deployed version?"
 
 ### `/eval` — Evaluation Engineering
 
-Seven modes for rigorous LLM evaluation.
+Eight modes for rigorous LLM evaluation.
 
 | Mode | What it does |
 |------|--------------|
-| `audit` | Diagnose eval infrastructure across 6 areas (error analysis, judge validation, metric quality, data quality, coverage, freshness) |
-| `analyze` | Systematic error analysis on 20-50 traces. Categories emerge from observation, not assumption. |
-| `judge <criterion>` | Design a binary Pass/Fail LLM judge with task, definitions, examples, and output format |
-| `validate` | Validate a judge against human-labeled data. Target: TPR > 90%, TNR > 90%. |
-| `run` | Execute judges against a dataset with confidence intervals and bias correction |
-| `rag` | Evaluate RAG pipelines — separates retrieval metrics (Recall@k, Precision@k, MRR) from generation metrics (faithfulness, relevance, completeness) |
-| `synthetic` | Generate dimension-based synthetic test data when real data is sparse |
+| `audit` | Diagnose eval infrastructure across 6 areas |
+| `analyze` | Systematic error analysis on 20-50 traces |
+| `judge <criterion>` | Design a binary Pass/Fail LLM judge |
+| `validate` | Validate a judge against human-labeled data (target TPR/TNR > 90%) |
+| `run` | Execute judges against a dataset with confidence intervals |
+| `rag` | Evaluate RAG pipelines — separates retrieval from generation |
+| `synthetic` | Generate dimension-based synthetic test data |
+| `dashboard` | Summary of all recent eval runs with trend indicators |
 
 ```
 /craft-cli:eval audit
 /craft-cli:eval judge factual_accuracy
-/craft-cli:eval rag
+/craft-cli:eval dashboard
 ```
 
 ### `/debug` — Systematic Debugging
@@ -94,11 +144,14 @@ Four-phase protocol. No shortcuts, no guessing.
 reproduce → isolate → understand → fix
 ```
 
-Each phase has a gate: you don't move forward until the current phase is complete. Root cause is stated in one sentence before any fix is proposed.
+Each phase has a gate. Root cause is stated in one sentence before any fix is proposed. Supports `--postmortem` flag to generate an incident report after fixing.
 
 ```
 /craft-cli:debug
+/craft-cli:debug --postmortem
 ```
+
+**Chains to:** `/review` — "Bug fixed. Check for similar issues in adjacent code?"
 
 ### `/docs` — Library Documentation Lookup
 
@@ -106,11 +159,38 @@ Fetches fresh, up-to-date library documentation via Context7 MCP before you writ
 
 | Mode | Command | What it does |
 |------|---------|--------------|
-| **Quick** | `/craft-cli:docs next.js app router` | Specific topic lookup — key APIs, parameters, code example |
-| **Deep** | `/craft-cli:docs supabase rls policies` | Comprehensive overview — patterns, gotchas, version-specific behavior |
-| **Compare** | `/craft-cli:docs drizzle vs prisma` | Side-by-side API comparison of two libraries |
+| **Quick** | `/craft-cli:docs next.js app router` | Specific topic — key APIs, parameters, code example |
+| **Deep** | `/craft-cli:docs supabase rls policies` | Comprehensive — patterns, gotchas, version-specific behavior |
+| **Compare** | `/craft-cli:docs drizzle vs prisma` | Side-by-side API comparison |
 
-Auto-triggers when Claude detects unfamiliar API usage, deprecated patterns, or "how does X work" questions about a library.
+Auto-triggers when Claude detects unfamiliar API usage or "how does X work" questions.
+
+### `verification` — Completion Gate
+
+Enforces evidence-based completion claims. Not invoked directly — it's a discipline that all skills follow.
+
+**The rule:** No "done", "that should work", or "I've fixed it" without fresh evidence from the current session.
+
+| Claim | Required evidence |
+|-------|-------------------|
+| "Tests pass" | Actual test runner output |
+| "Build succeeds" | Actual build output |
+| "Bug is fixed" | Reproduction now produces correct behavior |
+| "No regressions" | Test suite output after changes |
+
+### `using-craft-cli` — Meta-Skill
+
+Teaches Claude when to auto-invoke skills and how they chain together. Loaded on every session. Defines:
+- Auto-trigger rules (e.g., error appears → `/debug`)
+- Skill chaining (e.g., after `/think` → suggest `/plan`)
+- Context passing conventions (`.craft/context/`)
+- Instruction priority (user > skill > meta-skill > defaults)
+
+## Agent
+
+### `code-reviewer`
+
+Specialized review agent dispatched by `/review` for branches with 5+ changed files. Performs parallel analysis with confidence scoring (0-100). Only surfaces findings ≥ 75.
 
 ## Hooks
 
@@ -124,25 +204,20 @@ Five quality gates that run automatically — no exceptions, no opt-out.
 | **Session context** | `SessionStart` | Every session | Loads git branch, recent commits, uncommitted changes, open PR |
 | **Completion check** | `Stop` | Every completion | Blocks if modified TS/JS files have `any` types, `console.log`, or TypeScript errors |
 
-## How Skills Work Together
+## Context System
 
-```
-                    /think
-                      |
-                      v
-     /docs -----> implement -----> /debug
-                      |
-                      v
-                   /review
-                      |
-                      v
-     /eval <----- /ship -------> /qa
-```
+Skills share state through `.craft/context/` in the project root:
 
-- **`/think` + `/docs`** — Fetch real API surface before committing to an architecture
-- **`/debug` + `/docs`** — Verify API assumptions when root cause involves library misunderstanding
-- **`/ship` + `/review` + `/eval`** — Ship runs review automatically; eval gate triggers when prompt files change
-- **`/qa`** — Test the deployed result after shipping
+| Skill | Writes | Read by |
+|-------|--------|---------|
+| `/think` | `design.md` | `/plan` |
+| `/plan` | `plan.md` | Implementation |
+| `/review` | `review.md` | `/ship` |
+| `/eval` | `eval.md` | `/ship` |
+| `/debug` | `postmortem.md` | `/review` |
+| `/qa` | `qa-report.md` | `/debug` |
+
+Add `.craft/` to your `.gitignore` — these are session artifacts, not source code.
 
 ## Requirements
 
@@ -161,16 +236,21 @@ craft-cli/
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── skills/
-│   │   ├── think/SKILL.md
-│   │   ├── review/SKILL.md
+│   │   ├── using-craft-cli/SKILL.md      # Meta-skill (auto-trigger + chaining)
+│   │   ├── think/SKILL.md                # Design thinking + ADRs
+│   │   ├── plan/SKILL.md                 # Implementation planning
+│   │   ├── review/SKILL.md               # Code review + confidence scoring
 │   │   │   └── references/checklist.md
-│   │   ├── qa/SKILL.md
+│   │   ├── qa/SKILL.md                   # Live URL testing
 │   │   │   └── references/issue-taxonomy.md, report-template.md
-│   │   ├── ship/SKILL.md
-│   │   ├── eval/SKILL.md
+│   │   ├── ship/SKILL.md                 # Ship workflow (--resume, --hotfix)
+│   │   ├── eval/SKILL.md                 # Evaluation engineering + dashboard
 │   │   │   └── references/judge-template.md, methodology.md
-│   │   ├── debug/SKILL.md
-│   │   └── docs/SKILL.md
+│   │   ├── debug/SKILL.md                # Debugging + postmortem
+│   │   ├── docs/SKILL.md                 # Library docs via Context7
+│   │   └── verification/SKILL.md         # Completion gate
+│   ├── agents/
+│   │   └── code-reviewer.md              # Parallel review agent
 │   └── hooks/
 │       ├── hooks.json
 │       └── scripts/
@@ -187,39 +267,24 @@ craft-cli/
 
 ## Testing
 
-After installing, verify each skill loads correctly:
+After installing, verify the workflow:
 
 ```bash
 # Validate plugin structure
 claude plugin validate .
 
-# Test each skill invocation
-/craft-cli:think         # Should prompt for a design problem
-/craft-cli:review        # Should analyze current branch diff
-/craft-cli:qa <url>      # Should navigate and test a live URL
-/craft-cli:ship --dry-run # Should run preflight through review without committing
-/craft-cli:eval audit    # Should audit eval infrastructure
-/craft-cli:debug         # Should prompt for bug details
-/craft-cli:docs react    # Should resolve library and fetch docs
-```
+# Test skill chaining
+/craft-cli:think         # Design something → should suggest /plan
+/craft-cli:plan           # Plan implementation → should suggest starting
+/craft-cli:review        # Review branch → should suggest /ship
+/craft-cli:ship --dry-run # Preflight through review → should suggest /qa
+/craft-cli:debug         # Debug a bug → should suggest /review
+/craft-cli:docs react    # Fetch docs → should provide actionable API info
 
-Verify hooks fire on their events:
-
-```bash
-# Session context — fires on every new session
-# Open a new Claude Code session, should see git context loaded
-
-# Secret scanner — fires on every Write/Edit
-# Try writing a file with "sk-abc123" — should be blocked
-
-# Pre-commit validator — fires on git commit via Bash
-# Make a change with a TypeScript error, try to commit — should be blocked
-
-# Post-edit test runner — fires after Write/Edit
-# Edit a source file — test suite should run automatically
-
-# Completion check — fires on Stop
-# Modify a .ts file to include `any` type — should block completion
+# Test auto-triggering (via using-craft-cli meta-skill)
+# Describe a design problem → should auto-invoke /think
+# Report a bug → should auto-invoke /debug
+# Say "ship it" → should auto-invoke /ship
 ```
 
 ## License

@@ -7,7 +7,7 @@ disable-model-invocation: false
 
 # /qa — QA Testing via Chrome DevTools MCP
 
-You are a QA engineer testing a live URL using Chrome DevTools MCP tools.
+Test a live URL using Chrome DevTools MCP tools.
 
 ## Usage
 
@@ -98,6 +98,16 @@ Save report to `.qa-reports/[domain]-[date].md` with:
 - Regression comparison (if baseline exists)
 
 Save baseline to `.qa-reports/[domain]-baseline.json` with scores for regression tracking.
+
+## Context Passing
+
+After QA completes, save a summary to `.craft/context/qa-report.md` with:
+- URL tested
+- Health score
+- Critical/major issues found
+- Lighthouse scores
+
+**Next step:** If issues found → recommend `/debug` to investigate. If clean → report the health score and close the loop.
 
 ## When to auto-invoke
 

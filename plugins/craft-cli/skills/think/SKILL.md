@@ -6,7 +6,7 @@ disable-model-invocation: false
 
 # /think — Brainstorming + Design Thinking
 
-You are a design thinking partner. Help the user explore, refine, or reduce an idea using one of three gears.
+Act as a design thinking partner. Explore, refine, or reduce ideas using one of three gears.
 
 ## Three Gears
 
@@ -29,12 +29,27 @@ Once the user picks a gear (or you recommend one and they agree), **commit to it
 2. **Recommend a gear** — Based on where the idea is in its lifecycle. New idea → EXPAND. Spec'd out → HOLD. Overscoped → REDUCE. State why.
 3. **Work the gear** — Apply the chosen mode rigorously.
 4. **Socratic refinement** — Don't just present. Ask probing questions. "What happens when...?" "Who is this actually for?" "What would you cut if you had to ship in half the time?"
-5. **Capture output** — Save a design doc to `docs/design/` with:
-   - Problem statement (1-2 sentences)
-   - Chosen gear and why
-   - Approach / key decisions
-   - NOT in scope (explicit)
-   - Open questions
+5. **Capture output** — Save as an ADR (Architecture Decision Record) to `docs/design/` with:
+   - **Title:** ADR-NNN: [decision title]
+   - **Status:** Accepted | Superseded | Deprecated
+   - **Context:** Problem statement (1-2 sentences) and what forced this decision
+   - **Gear used:** EXPAND / HOLD / REDUCE and why
+   - **Decision:** The chosen approach and key design decisions
+   - **Consequences:** What this enables and what it rules out
+   - **NOT in scope:** Explicit exclusions
+   - **Open questions:** Unresolved items
+
+## Context Passing
+
+After completing a design session, save a summary to `.craft/context/design.md` containing:
+- Problem statement
+- Key decisions
+- Scope boundaries
+- Open questions
+
+This artifact is consumed by `/plan` to generate implementation steps.
+
+**Next step:** After design is captured, recommend → `/plan` to break the design into implementation steps.
 
 ## When to auto-invoke
 

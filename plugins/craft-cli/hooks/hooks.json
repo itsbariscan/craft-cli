@@ -6,7 +6,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/pre-commit-validate.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/pre-commit-validate.sh",
+            "timeout": 30
           }
         ]
       },
@@ -15,7 +16,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/secret-scanner.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/secret-scanner.sh",
+            "timeout": 5
           }
         ]
       }
@@ -26,7 +28,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/post-edit-test.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/post-edit-test.sh",
+            "timeout": 60
           }
         ]
       }
@@ -36,7 +39,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-context.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-context.sh",
+            "timeout": 10
           }
         ]
       }
@@ -46,7 +50,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/completion-check.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/completion-check.sh",
+            "timeout": 15
           }
         ]
       }
