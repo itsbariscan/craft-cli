@@ -17,9 +17,11 @@ Parse mode from `$ARGUMENTS`. If no mode specified, auto-select based on context
 ## Input Sources
 
 Check before asking the user to re-explain:
-1. **`.craft/context/design.md`** — output from `/think`. If it exists, challenge that design.
-2. **`$ARGUMENTS`** — the user may describe what to challenge inline.
-3. **Conversation context** — the user may have just presented an idea.
+1. **`.craft/context/design.md`** — output from `/think`. If it exists, challenge that design. Parse the YAML frontmatter to extract `gear`, `problem`, and `decisions`. Use `gear` to calibrate challenge intensity: EXPAND designs need scrutiny on scope creep; REDUCE designs need scrutiny on whether cuts went too deep; HOLD designs need scrutiny on edge cases that were missed.
+2. **`.craft/context/scope.md`** — output from `/scope`. If it exists, use `not_building` as guardrails — don't challenge things already declared out of scope.
+3. **`.craft/knowledge/`** — check for entries with `type: risk-pattern` relevant to the domain. Past risk patterns inform what to look for.
+4. **`$ARGUMENTS`** — the user may describe what to challenge inline.
+5. **Conversation context** — the user may have just presented an idea.
 
 ## Three Modes
 
@@ -147,13 +149,27 @@ This skill is useless if it pulls punches. Follow these rules:
 
 ## Context Passing
 
-Save output to `.craft/context/challenge.md` with:
-- Mode used
-- Key findings (risk map, failure paths, or gaps)
-- Verdict
-- Recommended mitigations
+Save output to `.craft/context/challenge.md` with YAML frontmatter for programmatic consumption:
 
-This artifact is consumed by `/plan` — mitigations become explicit steps or risk flags in the implementation plan.
+```markdown
+---
+skill: challenge
+mode: advocate|invert|backcast
+verdict: proceed|proceed_with_mitigations|reconsider
+mitigations:
+  - "<mitigation 1>"
+  - "<mitigation 2>"
+fatal_risks: <count>
+confidence: high|medium|low
+timestamp: YYYY-MM-DD
+---
+
+[Full prose: risk map, failure paths, or gaps depending on mode]
+```
+
+This artifact is consumed by `/plan` — mitigations from the frontmatter become explicit steps in the implementation plan. If `verdict: reconsider`, `/plan` will warn before proceeding.
+
+If the challenge reveals a significant risk pattern (any Fatal finding or a recurring pattern), also persist it as a knowledge entry to `.craft/knowledge/YYYY-MM-DD-risk-<slug>.md` with `type: risk-pattern` so it can be surfaced in future challenge sessions.
 
 **Next step:** After challenge completes:
 - If verdict is "proceed" or "proceed with mitigations" → recommend `/plan`

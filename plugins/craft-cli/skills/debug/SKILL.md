@@ -21,6 +21,8 @@ Confirm the bug exists and get a reliable trigger.
 
 ## Phase 2: Isolate
 
+Before investigating, check `.craft/knowledge/` for entries with `type: postmortem` whose keywords match the current error, affected file, or code area. Past postmortems may reveal recurring patterns — check those paths first.
+
 Narrow to the failing component. Do not guess.
 
 - Read the full error message and stack trace. Every line.
@@ -66,9 +68,19 @@ Don't trigger for:
 
 ## Postmortem Mode
 
-When invoked with `--postmortem` or after fixing a significant bug, generate an incident report:
+When invoked with `--postmortem` or after fixing a significant bug, generate an incident report saved to `.craft/context/postmortem.md` with YAML frontmatter:
 
-```
+```markdown
+---
+skill: debug
+bug_title: "<title>"
+root_cause: "<one sentence>"
+pattern: "<recurring pattern name, if any>"
+detection: "<how it could have been caught>"
+severity: critical|major|minor
+timestamp: YYYY-MM-DD
+---
+
 ## Postmortem: [bug title]
 - **Symptom:** What the user saw
 - **Root cause:** One sentence
@@ -77,8 +89,8 @@ When invoked with `--postmortem` or after fixing a significant bug, generate an 
 - **Pattern:** Is this a recurring class of bug?
 ```
 
-Save to `.craft/context/postmortem.md` so `/review` can check for similar patterns.
+After saving the postmortem, also persist it as a knowledge entry to `.craft/knowledge/YYYY-MM-DD-<bug-slug>.md` with `type: postmortem` so it can be surfaced in future debugging sessions. See the Knowledge System section in the meta-skill.
 
 ## Context Passing
 
-**Next step:** After fix is verified → recommend `/review` to check for similar issues in adjacent code.
+**Next step:** After fix is verified → dispatch the `test-writer` agent to generate a regression test, then recommend `/review` to check for similar issues in adjacent code.

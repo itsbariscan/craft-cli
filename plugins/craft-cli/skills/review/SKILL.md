@@ -13,6 +13,7 @@ Perform a structured two-pass code review on the current branch's changes agains
 1. Get the diff: `git diff main...HEAD` (or against the target branch if specified)
 2. Identify all changed files and understand the scope of changes
 3. Read each changed file in full (not just the diff) to understand context
+4. Check `.craft/knowledge/` for `type: postmortem` entries relevant to the files being reviewed — past bugs in the same areas inform what to scrutinize
 
 ## Pass 1: CRITICAL (blocks /ship)
 
@@ -78,13 +79,22 @@ For smaller changes, perform the review directly without agent dispatch.
 
 ## Context Integration
 
-After review completes, save findings to `.craft/context/review.md` with:
-- Branch name
-- Critical findings (with status: open/resolved)
-- Informational findings
-- Overall assessment
+After review completes, save findings to `.craft/context/review.md` with YAML frontmatter:
 
-This artifact is consumed by `/ship` to include in the PR body.
+```markdown
+---
+skill: review
+branch: "<branch-name>"
+critical_count: <number>
+informational_count: <number>
+status: clean|has_criticals|has_informationals
+timestamp: YYYY-MM-DD
+---
+
+[Full prose: critical findings with status, informational findings, overall assessment]
+```
+
+This artifact is consumed by `/ship` — frontmatter `status` determines whether step 6 passes. If `status: has_criticals`, ship blocks until resolved.
 
 **Next step:** If no critical issues → recommend `/ship`. If critical issues exist → help fix them, then re-review.
 

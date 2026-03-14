@@ -101,11 +101,22 @@ Save baseline to `.qa-reports/[domain]-baseline.json` with scores for regression
 
 ## Context Passing
 
-After QA completes, save a summary to `.craft/context/qa-report.md` with:
-- URL tested
-- Health score
-- Critical/major issues found
-- Lighthouse scores
+After QA completes, save a summary to `.craft/context/qa-report.md` with YAML frontmatter:
+
+```markdown
+---
+skill: qa
+url: "<url>"
+health_score: <number>
+critical_issues: <count>
+major_issues: <count>
+lighthouse_performance: <number>
+lighthouse_accessibility: <number>
+timestamp: YYYY-MM-DD
+---
+
+[Full prose: health score breakdown, critical/major issues, Lighthouse scores]
+```
 
 **Next step:** If issues found → recommend `/debug` to investigate. If clean → report the health score and close the loop.
 

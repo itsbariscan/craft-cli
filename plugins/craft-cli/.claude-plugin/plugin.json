@@ -1,7 +1,7 @@
 {
   "name": "craft-cli",
-  "version": "2.1.0",
-  "description": "Developer workflow toolkit with connected skills that chain together: think → challenge → plan → implement → review → ship → qa. Eleven skills, one agent, and five quality-gate hooks for Claude Code.",
+  "version": "3.0.0",
+  "description": "Developer workflow toolkit with connected skills: scope → think → challenge → plan → implement → debug → review → ship → qa. Thirteen skills, two agents, knowledge persistence, and five quality-gate hooks for Claude Code.",
   "author": {
     "name": "Baris Can Sayin",
     "url": "https://github.com/itsbariscan"
@@ -15,10 +15,13 @@
     "llm-evaluation",
     "qa-testing",
     "skill-chaining",
-    "design-thinking"
+    "design-thinking",
+    "knowledge-persistence",
+    "project-scoping"
   ],
   "skills": [
     "./skills/using-craft-cli",
+    "./skills/scope",
     "./skills/think",
     "./skills/challenge",
     "./skills/plan",
@@ -28,6 +31,7 @@
     "./skills/eval",
     "./skills/debug",
     "./skills/docs",
+    "./skills/remember",
     "./skills/verification"
   ],
   "agents": "./agents",

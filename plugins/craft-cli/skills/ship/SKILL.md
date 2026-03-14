@@ -104,9 +104,9 @@ Everything else: note and continue.
 
 ## Context Integration
 
-Before starting, check `.craft/context/` for:
-- `review.md` — If a review was already run, use its findings instead of re-running step 6
-- `eval.md` — If evals were already run, use their results instead of re-running step 5
+Before starting, check `.craft/context/` for upstream artifacts and parse their YAML frontmatter:
+- `review.md` — If frontmatter `status: clean` or `status: has_informationals`, skip step 6. If `status: has_criticals`, re-run the review to verify fixes.
+- `eval.md` — If frontmatter `has_regressions: false`, skip step 5. If `has_regressions: true`, re-run evals to verify fixes.
 
 After each step, save progress to `.craft/context/ship-progress.md` so `--resume` can pick up where you left off.
 
