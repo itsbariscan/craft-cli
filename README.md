@@ -68,7 +68,7 @@ The reliability layer is worth highlighting. [Vercel's research](https://vercel.
 ### One-line install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/itsbariscan/craft-cli/main/plugins/craft-cli/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/itsbariscan/craft-cli/main/install.sh | bash
 ```
 
 This does three things:
@@ -89,7 +89,7 @@ claude plugin add itsbariscan/craft-cli
 
 # In your project root, run the setup script
 cd your-project
-bash ~/.claude/plugins/cache/craft-cli/plugins/craft-cli/install.sh
+bash ~/.claude/plugins/cache/craft-cli/install.sh
 ```
 
 ### What the install script does to your CLAUDE.md
@@ -758,38 +758,35 @@ All dependencies except Claude Code are optional. Skills that need them will tel
 
 ```
 craft-cli/
-├── plugins/craft-cli/
-│   ├── .claude-plugin/
-│   │   └── plugin.json                   # Plugin manifest (v3.0.0)
-│   ├── CLAUDE.md                         # Workflow rules template
-│   ├── install.sh                        # Setup script
-│   ├── skills/
-│   │   ├── using-craft-cli/SKILL.md      # Meta-skill (orchestrator)
-│   │   ├── scope/SKILL.md                # Project scoping
-│   │   ├── think/SKILL.md                # Design thinking + ADRs
-│   │   ├── challenge/SKILL.md            # Adversarial: advocate/invert/backcast
-│   │   ├── plan/SKILL.md                 # Implementation planning
-│   │   ├── review/SKILL.md               # Code review + confidence scoring
-│   │   ├── qa/SKILL.md                   # Live URL testing
-│   │   ├── ship/SKILL.md                 # Ship pipeline
-│   │   ├── eval/SKILL.md                 # Evaluation engineering
-│   │   ├── debug/SKILL.md                # Debugging + postmortem
-│   │   ├── docs/SKILL.md                 # Library docs via Context7
-│   │   ├── remember/SKILL.md             # Knowledge persistence
-│   │   └── verification/SKILL.md         # Completion gate
-│   ├── agents/
-│   │   ├── code-reviewer.md              # Parallel review agent
-│   │   └── test-writer.md                # Regression test generator
-│   └── hooks/
-│       ├── hooks.json                    # Hook configuration
-│       └── scripts/
-│           ├── pre-commit-validate.sh    # Type check + lint gate
-│           ├── secret-scanner.sh         # API key blocker
-│           ├── post-edit-test.sh         # Auto test runner
-│           ├── session-context.sh        # Git context + rule injection
-│           └── completion-check.sh       # Quality gate on stop
 ├── .claude-plugin/
-│   └── marketplace.json
+│   └── plugin.json                       # Plugin manifest (v3.0.0)
+├── CLAUDE.md                             # Workflow rules template
+├── install.sh                            # Setup script
+├── skills/
+│   ├── using-craft-cli/SKILL.md          # Meta-skill (orchestrator)
+│   ├── scope/SKILL.md                    # Project scoping
+│   ├── think/SKILL.md                    # Design thinking + ADRs
+│   ├── challenge/SKILL.md                # Adversarial: advocate/invert/backcast
+│   ├── plan/SKILL.md                     # Implementation planning
+│   ├── review/SKILL.md                   # Code review + confidence scoring
+│   ├── qa/SKILL.md                       # Live URL testing
+│   ├── ship/SKILL.md                     # Ship pipeline
+│   ├── eval/SKILL.md                     # Evaluation engineering
+│   ├── debug/SKILL.md                    # Debugging + postmortem
+│   ├── docs/SKILL.md                     # Library docs via Context7
+│   ├── remember/SKILL.md                 # Knowledge persistence
+│   └── verification/SKILL.md             # Completion gate
+├── agents/
+│   ├── code-reviewer.md                  # Parallel review agent
+│   └── test-writer.md                    # Regression test generator
+├── hooks/
+│   ├── hooks.json                        # Hook configuration
+│   └── scripts/
+│       ├── pre-commit-validate.sh        # Type check + lint gate
+│       ├── secret-scanner.sh             # API key blocker
+│       ├── post-edit-test.sh             # Auto test runner
+│       ├── session-context.sh            # Git context + rule injection
+│       └── completion-check.sh           # Quality gate on stop
 ├── LICENSE
 └── README.md
 ```

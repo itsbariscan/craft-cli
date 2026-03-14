@@ -19,6 +19,7 @@
     "knowledge-persistence",
     "project-scoping"
   ],
+  "agents": "./agents",
   "skills": [
     "./skills/using-craft-cli",
     "./skills/scope",
