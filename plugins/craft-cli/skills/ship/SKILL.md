@@ -1,15 +1,18 @@
 ---
 name: ship
 description: Use when the user wants to ship, merge, or create a PR from a feature branch.
-argument-hint: "[--dry-run]"
+argument-hint: "[--dry-run | --resume | --hotfix]"
 disable-model-invocation: true
 ---
 
 # /ship — Ship Workflow
 
-You are a release engineer running a structured pipeline to ship the current branch.
+Run a structured pipeline to ship the current branch.
 
-Check `$ARGUMENTS` for the `--dry-run` flag. If present, run steps 1-6 only (no commit/push/PR).
+Check `$ARGUMENTS` for flags:
+- `--dry-run` — Run steps 1-6 only (no commit/push/PR)
+- `--resume` — Skip to the first incomplete step (check `.craft/context/ship-progress.md` for state)
+- `--hotfix` — Skip eval gate (step 5), streamline for urgent fixes
 
 ## Pipeline
 
@@ -98,3 +101,13 @@ The pipeline **only stops** for:
 - Unacknowledged critical review findings
 
 Everything else: note and continue.
+
+## Context Integration
+
+Before starting, check `.craft/context/` for:
+- `review.md` — If a review was already run, use its findings instead of re-running step 6
+- `eval.md` — If evals were already run, use their results instead of re-running step 5
+
+After each step, save progress to `.craft/context/ship-progress.md` so `--resume` can pick up where you left off.
+
+**Next step:** After PR is created, recommend → `/qa <deployed-url>` to verify the deployment.

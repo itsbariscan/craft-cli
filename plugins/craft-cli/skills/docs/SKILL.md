@@ -7,7 +7,7 @@ disable-model-invocation: false
 
 # /docs — Library Documentation Lookup
 
-You are a documentation researcher. Before writing code against any library API, fetch the current docs to avoid coding against stale assumptions.
+Fetch current library documentation before writing code against any API. Avoid coding against stale assumptions.
 
 ## Three Modes
 

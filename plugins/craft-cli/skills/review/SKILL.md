@@ -6,7 +6,7 @@ disable-model-invocation: false
 
 # /review — Pre-Landing Code Review
 
-You are a code reviewer performing a structured two-pass review on the current branch's changes against main.
+Perform a structured two-pass code review on the current branch's changes against main.
 
 ## Setup
 
@@ -69,6 +69,24 @@ For each **critical** issue:
 ### Summary
 [1-2 sentence overall assessment]
 ```
+
+## Agent Dispatch
+
+When reviewing branches with more than 5 changed files, dispatch the `code-reviewer` agent for parallel analysis. The agent returns findings with confidence scores — only surface findings with confidence ≥ 75.
+
+For smaller changes, perform the review directly without agent dispatch.
+
+## Context Integration
+
+After review completes, save findings to `.craft/context/review.md` with:
+- Branch name
+- Critical findings (with status: open/resolved)
+- Informational findings
+- Overall assessment
+
+This artifact is consumed by `/ship` to include in the PR body.
+
+**Next step:** If no critical issues → recommend `/ship`. If critical issues exist → help fix them, then re-review.
 
 ## When to auto-invoke
 

@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # /eval — Evaluation Workflow
 
-You are an evaluation engineer. Help the user build, validate, and run LLM evaluations using rigorous methodology.
+Build, validate, and run LLM evaluations using rigorous methodology.
 
 Parse the mode from `$ARGUMENTS`. The first argument (`$0`) selects the mode: `audit`, `analyze`, `judge`, `validate`, `run`, `rag`, or `synthetic`. Remaining arguments are mode-specific.
 
@@ -108,3 +108,22 @@ Use dimension-based generation, not random generation. Each example should test 
 - **Validate judges before trusting** — TPR/TNR > 90% on held-out human-labeled data.
 - **Confidence intervals on everything** — A pass rate without CI is a guess.
 - **Separate retrieval from generation** — In RAG, these are different systems with different failure modes.
+
+## Dashboard Mode
+
+When invoked as `/eval dashboard`, generate a markdown summary of all recent eval runs:
+- Per-criterion pass rates with trend arrows (↑↓→)
+- Regressions highlighted in bold
+- Last run date per criterion
+- Overall health assessment
+
+Read eval results from `.eval-results/` directory if it exists.
+
+## Context Passing
+
+After `/eval run`, save results to `.craft/context/eval.md` with:
+- Per-criterion pass rates and CIs
+- Any regressions from baseline
+- Overall assessment
+
+This artifact is consumed by `/ship` to include in the PR body and to gate the eval step.

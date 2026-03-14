@@ -1,20 +1,34 @@
 {
   "name": "craft-cli",
-  "version": "1.0.0",
-  "description": "Developer workflow toolkit: think, debug, review, eval, qa, ship, docs. Seven skills and five quality-gate hooks for Claude Code.",
+  "version": "2.0.0",
+  "description": "Developer workflow toolkit with connected skills that chain together: think → plan → implement → review → ship → qa. Ten skills, one agent, and five quality-gate hooks for Claude Code.",
   "author": {
     "name": "Baris Can Sayin",
     "url": "https://github.com/itsbariscan"
   },
   "repository": "https://github.com/itsbariscan/craft-cli",
-  "keywords": ["developer-workflow", "code-review", "debugging", "quality-gates", "llm-evaluation", "qa-testing"],
+  "keywords": [
+    "developer-workflow",
+    "code-review",
+    "debugging",
+    "quality-gates",
+    "llm-evaluation",
+    "qa-testing",
+    "skill-chaining",
+    "design-thinking"
+  ],
   "skills": [
+    "./skills/using-craft-cli",
     "./skills/think",
+    "./skills/plan",
     "./skills/review",
     "./skills/qa",
     "./skills/ship",
     "./skills/eval",
     "./skills/debug",
-    "./skills/docs"
-  ]
+    "./skills/docs",
+    "./skills/verification"
+  ],
+  "agents": "./agents",
+  "hooks": "./hooks/hooks.json"
 }

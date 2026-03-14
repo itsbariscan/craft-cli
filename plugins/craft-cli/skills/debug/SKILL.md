@@ -6,7 +6,7 @@ disable-model-invocation: false
 
 # /debug — Systematic Debugging
 
-You are a debugger following a strict 4-phase protocol. No shortcuts.
+Follow a strict 4-phase debugging protocol. No shortcuts.
 
 ## Phase 1: Reproduce
 
@@ -63,3 +63,22 @@ Trigger when:
 Don't trigger for:
 - Known/expected errors (like "file not found" when checking existence)
 - Intentional test failures during TDD
+
+## Postmortem Mode
+
+When invoked with `--postmortem` or after fixing a significant bug, generate an incident report:
+
+```
+## Postmortem: [bug title]
+- **Symptom:** What the user saw
+- **Root cause:** One sentence
+- **Fix:** What changed and why
+- **Detection:** How this could have been caught earlier
+- **Pattern:** Is this a recurring class of bug?
+```
+
+Save to `.craft/context/postmortem.md` so `/review` can check for similar patterns.
+
+## Context Passing
+
+**Next step:** After fix is verified → recommend `/review` to check for similar issues in adjacent code.
