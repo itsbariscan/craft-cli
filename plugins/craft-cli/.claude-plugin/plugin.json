@@ -33,6 +33,5 @@
     "./skills/docs",
     "./skills/remember",
     "./skills/verification"
-  ],
-  "hooks": "./hooks/hooks.json"
+  ]
 }
