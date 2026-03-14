@@ -15,6 +15,8 @@ Skills form a directed graph. The **golden path** flows top-to-bottom, but you c
 ```
 /think (design)
    ↓
+/challenge (stress-test) ←── optional, like /docs
+   ↓
 /plan (break into steps)
    ↓
 implement (write code) ←── /docs (lookup APIs)
@@ -29,6 +31,7 @@ implement (write code) ←── /docs (lookup APIs)
 ```
 
 Side entries that feed into the main flow:
+- `/challenge` → sits between `/think` and `/plan`, optional but recommended for high-stakes decisions
 - `/eval` → feeds into `/review` or `/ship`
 - `/docs` → feeds into any skill that needs API knowledge
 
@@ -39,6 +42,7 @@ Side entries that feed into the main flow:
 | Condition | Invoke |
 |-----------|--------|
 | User describes a design problem, says "how should we approach", or is choosing between approaches | `/think` |
+| User says "poke holes", "what could go wrong", "play devil's advocate", or presents idea with high conviction but no scrutiny | `/challenge` |
 | A design is agreed upon and needs to become implementation steps | `/plan` |
 | User asks "how does X work" about a library, or you're about to use an unfamiliar API | `/docs` |
 | An error appears, tests fail unexpectedly, user reports a bug | `/debug` |
@@ -51,7 +55,9 @@ Side entries that feed into the main flow:
 
 When a skill completes, **recommend the next skill in the workflow**. Be specific:
 
-- After `/think` → "Design captured. Want to break this into implementation steps? → `/plan`"
+- After `/think` → "Design captured. Stress-test with `/challenge`? Or jump to `/plan` for implementation steps?"
+- After `/challenge` with proceed → "Challenge complete. Ready to `/plan` with mitigations incorporated?"
+- After `/challenge` with reconsider → "Significant risks found. Back to `/think` with a different gear?"
 - After `/plan` → "Plan ready with N steps. Start implementing step 1?"
 - After implementation → "Implementation complete. Run `/review` to check quality?"
 - After `/debug` → "Bug fixed. Want to run `/review` to check for similar issues?"
@@ -65,7 +71,8 @@ Skills share state through **context artifacts** saved to `.craft/context/` in t
 
 | Skill | Writes | Read by |
 |-------|--------|---------|
-| `/think` | `design.md` — problem, gear, decisions, scope | `/plan` |
+| `/think` | `design.md` — problem, gear, decisions, scope | `/challenge`, `/plan` |
+| `/challenge` | `challenge.md` — risk map, verdict, mitigations | `/plan` |
 | `/plan` | `plan.md` — ordered steps, files, risks | implementation |
 | `/review` | `review.md` — findings, severity, status | `/ship` |
 | `/eval` | `eval.md` — pass rates, regressions | `/ship` |

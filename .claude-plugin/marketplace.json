@@ -1,7 +1,7 @@
 {
   "name": "craft-cli",
-  "version": "2.0.0",
-  "description": "Developer workflow toolkit with connected skills: think → plan → implement → review → ship → qa.",
+  "version": "2.1.0",
+  "description": "Developer workflow toolkit with connected skills: think → challenge → plan → implement → review → ship → qa.",
   "owner": {
     "name": "Baris Can Sayin",
     "email": "itsbariscan@github.com"
@@ -10,9 +10,9 @@
     {
       "name": "craft-cli",
       "source": "./plugins/craft-cli",
-      "description": "Ten connected workflow skills, one specialized agent, and five quality-gate hooks for Claude Code.",
-      "version": "2.0.0",
-      "keywords": ["developer-workflow", "code-review", "debugging", "quality-gates", "llm-evaluation", "qa-testing", "skill-chaining", "design-thinking"],
+      "description": "Eleven connected workflow skills, one specialized agent, and five quality-gate hooks for Claude Code.",
+      "version": "2.1.0",
+      "keywords": ["developer-workflow", "code-review", "debugging", "quality-gates", "llm-evaluation", "qa-testing", "skill-chaining", "design-thinking", "adversarial-thinking"],
       "category": "developer-workflow"
     }
   ]

@@ -49,7 +49,9 @@ After completing a design session, save a summary to `.craft/context/design.md` 
 
 This artifact is consumed by `/plan` to generate implementation steps.
 
-**Next step:** After design is captured, recommend → `/plan` to break the design into implementation steps.
+**Next step:** After design is captured, recommend:
+- → `/challenge` to stress-test the design before committing (advocate, invert, or backcast)
+- → `/plan` to skip straight to implementation steps if the design is low-risk
 
 ## When to auto-invoke
 
