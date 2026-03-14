@@ -25,6 +25,7 @@ Once the user picks a gear (or you recommend one and they agree), **commit to it
 
 ## Process
 
+0. **Check upstream context** — Read `.craft/context/scope.md` if it exists. Use the `building` field as the problem statement, `constraints` to calibrate the gear recommendation (tight time → REDUCE, open-ended → EXPAND), and `not_building` as guardrails. Also check `.craft/knowledge/` for entries with `type: decision` relevant to the current problem domain — past design decisions provide context for new ones. If no scope exists and the problem is non-trivial, recommend running `/scope` first.
 1. **Clarify the problem** — Restate it in one sentence. If you can't, ask questions until you can.
 2. **Recommend a gear** — Based on where the idea is in its lifecycle. New idea → EXPAND. Spec'd out → HOLD. Overscoped → REDUCE. State why.
 3. **Work the gear** — Apply the chosen mode rigorously.
@@ -41,13 +42,31 @@ Once the user picks a gear (or you recommend one and they agree), **commit to it
 
 ## Context Passing
 
-After completing a design session, save a summary to `.craft/context/design.md` containing:
-- Problem statement
-- Key decisions
-- Scope boundaries
-- Open questions
+After completing a design session, save a summary to `.craft/context/design.md` with YAML frontmatter for programmatic consumption by downstream skills:
 
-This artifact is consumed by `/plan` to generate implementation steps.
+```markdown
+---
+skill: think
+gear: expand|hold|reduce
+problem: "<one-sentence problem statement>"
+decisions:
+  - "<key decision 1>"
+  - "<key decision 2>"
+scope_boundaries:
+  - "<what's in scope>"
+not_in_scope:
+  - "<explicit exclusion>"
+open_questions:
+  - "<unresolved item>"
+timestamp: YYYY-MM-DD
+---
+
+[Full prose: problem statement, key decisions, scope boundaries, open questions]
+```
+
+This artifact is consumed by `/challenge` (to know what to attack) and `/plan` (to generate implementation steps). Downstream skills parse the frontmatter for programmatic decisions and read the prose body for full context.
+
+Also persist the design decision as a knowledge entry to `.craft/knowledge/YYYY-MM-DD-adr-<decision-slug>.md` with `type: decision` so it can be referenced in future sessions. See the Knowledge System section in the meta-skill.
 
 **Next step:** After design is captured, recommend:
 - → `/challenge` to stress-test the design before committing (advocate, invert, or backcast)

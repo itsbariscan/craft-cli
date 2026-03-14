@@ -121,9 +121,19 @@ Read eval results from `.eval-results/` directory if it exists.
 
 ## Context Passing
 
-After `/eval run`, save results to `.craft/context/eval.md` with:
-- Per-criterion pass rates and CIs
-- Any regressions from baseline
-- Overall assessment
+After `/eval run`, save results to `.craft/context/eval.md` with YAML frontmatter:
 
-This artifact is consumed by `/ship` to include in the PR body and to gate the eval step.
+```markdown
+---
+skill: eval
+mode: audit|analyze|judge|validate|run|rag|synthetic
+overall_pass_rate: <number>
+has_regressions: true|false
+criterion_count: <number>
+timestamp: YYYY-MM-DD
+---
+
+[Full prose: per-criterion pass rates and CIs, regressions, overall assessment]
+```
+
+This artifact is consumed by `/ship` — frontmatter `has_regressions` gates step 5. If `true`, ship blocks until investigated.

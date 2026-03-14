@@ -13,10 +13,12 @@ Turn designs, features, and ideas into ordered, executable implementation steps.
 
 Check these before asking the user to explain from scratch:
 
-1. **`.craft/context/design.md`** — output from `/think`. If it exists, use it as the starting point.
-2. **`.craft/context/challenge.md`** — output from `/challenge`. If it exists, incorporate mitigations as explicit steps or risk flags in the plan.
-3. **`$ARGUMENTS`** — the user may describe what to plan inline.
-4. **Conversation context** — the user may have just finished discussing the design.
+1. **`.craft/context/scope.md`** — output from `/scope`. If it exists, use `building` as the goal, `constraints` to flag steps that might violate limits, and `not_building` to auto-populate the "Out of scope" section.
+2. **`.craft/context/design.md`** — output from `/think`. If it exists, use it as the starting point. Parse frontmatter for `gear`, `decisions`, and `not_in_scope`.
+3. **`.craft/context/challenge.md`** — output from `/challenge`. If it exists, parse the frontmatter `verdict` field. If `verdict: reconsider`, warn the user that the upstream challenge recommended reconsidering before planning. If `verdict: proceed_with_mitigations`, ensure each item in the `mitigations` list becomes an explicit step in the plan.
+4. **`.craft/knowledge/`** — check for entries with `type: decision` or `type: risk-pattern` relevant to the current domain. Past decisions provide context; past risks inform risk identification.
+5. **`$ARGUMENTS`** — the user may describe what to plan inline.
+6. **Conversation context** — the user may have just finished discussing the design.
 
 If none of these provide enough context, ask: "What are we building? One sentence."
 
@@ -80,7 +82,21 @@ If the user says "execute" or "let's go" after seeing the plan:
 
 ## Context Output
 
-Save the plan to `.craft/context/plan.md` so other skills can reference it.
+Save the plan to `.craft/context/plan.md` with YAML frontmatter:
+
+```markdown
+---
+skill: plan
+goal: "<one-sentence goal>"
+step_count: <number>
+risk_count: <number>
+has_upstream_design: true|false
+has_upstream_challenge: true|false
+timestamp: YYYY-MM-DD
+---
+
+[Full prose: ordered steps, risks, out of scope]
+```
 
 ## When to auto-invoke
 
