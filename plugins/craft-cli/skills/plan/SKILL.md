@@ -14,8 +14,9 @@ Turn designs, features, and ideas into ordered, executable implementation steps.
 Check these before asking the user to explain from scratch:
 
 1. **`.craft/context/design.md`** — output from `/think`. If it exists, use it as the starting point.
-2. **`$ARGUMENTS`** — the user may describe what to plan inline.
-3. **Conversation context** — the user may have just finished discussing the design.
+2. **`.craft/context/challenge.md`** — output from `/challenge`. If it exists, incorporate mitigations as explicit steps or risk flags in the plan.
+3. **`$ARGUMENTS`** — the user may describe what to plan inline.
+4. **Conversation context** — the user may have just finished discussing the design.
 
 If none of these provide enough context, ask: "What are we building? One sentence."
 

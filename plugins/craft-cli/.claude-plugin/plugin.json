@@ -1,7 +1,7 @@
 {
   "name": "craft-cli",
-  "version": "2.0.0",
-  "description": "Developer workflow toolkit with connected skills that chain together: think → plan → implement → review → ship → qa. Ten skills, one agent, and five quality-gate hooks for Claude Code.",
+  "version": "2.1.0",
+  "description": "Developer workflow toolkit with connected skills that chain together: think → challenge → plan → implement → review → ship → qa. Eleven skills, one agent, and five quality-gate hooks for Claude Code.",
   "author": {
     "name": "Baris Can Sayin",
     "url": "https://github.com/itsbariscan"
@@ -20,6 +20,7 @@
   "skills": [
     "./skills/using-craft-cli",
     "./skills/think",
+    "./skills/challenge",
     "./skills/plan",
     "./skills/review",
     "./skills/qa",
