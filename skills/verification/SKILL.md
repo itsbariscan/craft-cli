@@ -1,6 +1,7 @@
 ---
 name: verification
 description: Enforces evidence-based completion claims. No "done" without proof. Auto-invoked before completion.
+allowed-tools: Read, Bash
 disable-model-invocation: false
 ---
 

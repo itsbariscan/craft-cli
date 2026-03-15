@@ -2,6 +2,7 @@
 name: remember
 description: Save and retrieve knowledge entries across sessions. Persists postmortems, design decisions, risk patterns, and insights to .craft/knowledge/.
 argument-hint: "[what to remember] or [search <terms>]"
+allowed-tools: Read, Write, Glob, Grep
 disable-model-invocation: false
 ---
 

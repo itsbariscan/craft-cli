@@ -2,6 +2,7 @@
 name: qa
 description: Use when testing a live URL, checking a deployed site, or the user wants to verify a web page works correctly.
 argument-hint: "[mode] [url]"
+context: fork
 disable-model-invocation: false
 ---
 

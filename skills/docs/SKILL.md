@@ -2,6 +2,7 @@
 name: docs
 description: Fetch up-to-date library documentation via Context7 MCP before planning or implementing. Takes a library name + optional topic.
 argument-hint: <library> [topic]
+context: fork
 disable-model-invocation: false
 ---
 

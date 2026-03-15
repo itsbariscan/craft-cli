@@ -1,6 +1,6 @@
 {
   "name": "craft-cli",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Developer workflow toolkit with connected skills: scope → think → challenge → plan → implement → debug → review → ship → qa. Thirteen skills, two agents, knowledge persistence, and five quality-gate hooks for Claude Code.",
   "author": {
     "name": "Baris Can Sayin",
@@ -33,5 +33,6 @@
     "./skills/docs",
     "./skills/remember",
     "./skills/verification"
-  ]
+  ],
+  "hooks": "./hooks/hooks.json"
 }

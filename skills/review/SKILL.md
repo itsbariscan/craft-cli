@@ -1,6 +1,7 @@
 ---
 name: review
 description: Use when reviewing code before merging, checking a branch for issues, or the user asks about code quality.
+allowed-tools: Read, Grep, Glob, Bash(git:*), Agent
 disable-model-invocation: false
 ---
 

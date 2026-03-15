@@ -2,6 +2,7 @@
 name: eval
 description: Use when evaluating LLM output quality, auditing eval pipelines, designing judges, or analyzing failure modes.
 argument-hint: "[mode] [args]"
+context: fork
 disable-model-invocation: true
 ---
 
