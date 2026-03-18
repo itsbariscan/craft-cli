@@ -1,6 +1,6 @@
 ---
 name: docs
-description: Fetch up-to-date library documentation via Context7 MCP before planning or implementing. Takes a library name + optional topic.
+description: Use when the user asks "how does X work" about a library, when you're about to use an unfamiliar API, or when you encounter deprecated patterns. Fetches docs via Context7 MCP.
 argument-hint: <library> [topic]
 context: fork
 disable-model-invocation: false

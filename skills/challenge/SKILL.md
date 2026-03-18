@@ -1,6 +1,6 @@
 ---
 name: challenge
-description: Stress-test ideas, designs, and decisions before committing. Three modes: advocate (attack assumptions), invert (imagine failure), backcast (work backwards from success).
+description: Use when the user says "poke holes", "what could go wrong", "play devil's advocate", or presents an idea with high conviction but no scrutiny. Three modes: advocate, invert, backcast.
 argument-hint: "[advocate | invert | backcast] [topic]"
 disable-model-invocation: false
 ---

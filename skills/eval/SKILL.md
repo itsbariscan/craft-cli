@@ -76,6 +76,10 @@ Execute existing judges against a dataset:
 
 See methodology: [methodology](references/methodology.md)
 
+**Scripts available:**
+- `scripts/wilson-interval.py` — Calculate Wilson score confidence intervals. Usage: `python3 scripts/wilson-interval.py <passes> <total> [--tpr X --tnr Y]`
+- `scripts/run-judge.py` — Prepare judge prompts, validate datasets, and score results. Three subcommands: `validate` (check dataset format), `prepare` (generate prompts from template + data), `score` (compute pass rates with CI from completed results)
+
 ### `/eval rag`
 Evaluate RAG pipeline by separating retrieval from generation:
 

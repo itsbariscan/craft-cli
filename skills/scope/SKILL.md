@@ -1,6 +1,6 @@
 ---
 name: scope
-description: Define project scope before designing. What you're building, constraints, and what you're NOT building. Use before /think for non-trivial work.
+description: Use when the user says "I want to build...", "new feature:", or describes work with unclear boundaries. Defines what you're building, constraints, and what you're NOT building.
 argument-hint: "[description of what to build]"
 disable-model-invocation: false
 ---

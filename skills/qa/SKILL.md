@@ -100,6 +100,9 @@ Save report to `.qa-reports/[domain]-[date].md` with:
 
 Save baseline to `.qa-reports/[domain]-baseline.json` with scores for regression tracking.
 
+**Scripts available:**
+- `scripts/screenshot-diff.sh` — Compare two screenshots and output a diff image + similarity score. Usage: `./scripts/screenshot-diff.sh <baseline.png> <current.png> [diff-output.png]`. Requires ImageMagick. Returns JSON with `identical`, `difference_score` (0.0-1.0), and `pixel_count`. Use during regression testing to quantify visual changes.
+
 ## Context Passing
 
 After QA completes, save a summary to `.craft/context/qa-report.md` with YAML frontmatter:

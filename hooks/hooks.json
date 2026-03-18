@@ -20,6 +20,16 @@
             "timeout": 5
           }
         ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/skill-usage-logger.sh",
+            "timeout": 3
+          }
+        ]
       }
     ],
     "PostToolUse": [

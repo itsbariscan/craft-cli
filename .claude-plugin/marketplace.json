@@ -11,8 +11,8 @@
     {
       "name": "craft-cli",
       "source": "./",
-      "description": "Thirteen connected workflow skills, two specialized agents, and five quality-gate hooks for Claude Code.",
-      "version": "3.1.0",
+      "description": "Thirteen connected workflow skills, two specialized agents, six quality-gate hooks, and composable scripts for Claude Code.",
+      "version": "3.2.0",
       "keywords": ["developer-workflow", "code-review", "debugging", "quality-gates", "llm-evaluation", "qa-testing", "skill-chaining", "design-thinking", "knowledge-persistence", "project-scoping"],
       "category": "developer-workflow"
     }
