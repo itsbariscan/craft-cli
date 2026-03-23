@@ -29,7 +29,7 @@ implement (write code) ←── /docs (lookup APIs)
    ↓
 /ship (deliver)
    ↓
-/qa (verify live)
+/document-release (sync docs) + /qa (verify live)
 ```
 
 Side entries that feed into the main flow:
@@ -46,7 +46,7 @@ Side entries that feed into the main flow:
 | Condition | Invoke |
 |-----------|--------|
 | User says "I want to build...", "new feature:", or describes work with unclear boundaries | `/scope` |
-| User describes a design problem, says "how should we approach", or is choosing between approaches | `/think` |
+| User describes a design problem, says "how should we approach", is choosing between approaches, says "I have an idea", "is this worth building", "help me think through this", or "brainstorm" | `/think` |
 | User says "poke holes", "what could go wrong", "play devil's advocate", or presents idea with high conviction but no scrutiny | `/challenge` |
 | A design is agreed upon and needs to become implementation steps | `/plan` |
 | User asks "how does X work" about a library, or you're about to use an unfamiliar API | `/docs` |
@@ -56,12 +56,13 @@ Side entries that feed into the main flow:
 | User provides a URL to test, or a deployment just completed | `/qa` |
 | Discussion involves prompt quality, LLM output evaluation, or judge design | `/eval` |
 | User says "remember this", "save this", or asks "have we seen this before" | `/remember` |
+| User says "update docs", "sync documentation", or after `/ship` completes | `/document-release` |
 
 ## Skill Chaining
 
 When a skill completes, **recommend the next skill in the workflow**. Be specific:
 
-- After `/scope` → "Scope defined. Ready to `/think` with [suggested gear]?" — or if trivial: "Skip `/think`, go straight to `/plan`?"
+- After `/scope` → "Scope defined. Ready to `/think` with [suggested gear]?" — if problem is new/unvalidated: "Ready to `/think` with DISCOVER gear?" — or if trivial: "Skip `/think`, go straight to `/plan`?"
 - After `/think` → "Design captured. Stress-test with `/challenge`? Or jump to `/plan` for implementation steps?"
 - After `/challenge` with proceed → "Challenge complete. Ready to `/plan` with mitigations incorporated?"
 - After `/challenge` with reconsider → "Significant risks found. Back to `/think` with a different gear?"
@@ -69,7 +70,7 @@ When a skill completes, **recommend the next skill in the workflow**. Be specifi
 - After implementation → "Implementation complete. Run `/review` to check quality?"
 - After `/debug` → "Bug fixed. Generating regression test with test-writer agent, then recommend `/review`."
 - After `/review` with no criticals → "Review clean. Ready to `/ship`?"
-- After `/ship` → "PR created. Test the deployed version with `/qa <url>`?"
+- After `/ship` → "PR created. Test the deployed version with `/qa <url>`?" Also: "Docs may need updating. Run `/document-release`?"
 - After `/qa` → "QA complete. [Health score]. Any issues to `/debug`?"
 
 ## Context Passing
@@ -86,6 +87,7 @@ Skills share state through **context artifacts** saved to `.craft/context/` in t
 | `/eval` | `eval.md` — pass rates, regressions | `/ship` |
 | `/debug` | `postmortem.md` — root cause, fix, pattern | `/review`, test-writer agent |
 | `/qa` | `qa-report.md` — health score, issues | `/debug` |
+| `/document-release` | `docs-release.md` — doc health summary, changes made | — |
 
 When starting a skill, **check `.craft/context/` for upstream artifacts** and use them. Don't ask the user to repeat information that's already captured.
 

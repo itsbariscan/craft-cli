@@ -111,3 +111,5 @@ Before starting, check `.craft/context/` for upstream artifacts and parse their 
 After each step, save progress to `.craft/context/ship-progress.md` so `--resume` can pick up where you left off.
 
 **Next step:** After PR is created, recommend → `/qa <deployed-url>` to verify the deployment.
+
+**Documentation sync:** After PR is created, check if `.md` files exist in the repo. If yes, recommend: "Docs may need updating. Run `/document-release` to sync documentation with your changes?"

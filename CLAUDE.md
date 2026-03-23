@@ -9,7 +9,7 @@ Invoke these skills automatically when conditions match. Do not wait for slash c
 | Condition | Invoke |
 |-----------|--------|
 | User says "I want to build...", "new feature:", or describes work with unclear boundaries | `/scope` |
-| User describes a design problem, says "how should we approach", or is choosing between approaches | `/think` |
+| User describes a design problem, says "how should we approach", is choosing between approaches, says "I have an idea", "is this worth building", "help me think through this", or "brainstorm" | `/think` |
 | User says "poke holes", "what could go wrong", "play devil's advocate", or presents idea with high conviction but no scrutiny | `/challenge` |
 | A design is agreed upon and needs to become implementation steps | `/plan` |
 | User asks "how does X work" about a library, or you're about to use an unfamiliar API | `/docs` |
@@ -24,7 +24,7 @@ Invoke these skills automatically when conditions match. Do not wait for slash c
 
 After each skill completes, recommend the next:
 
-- `/scope` → `/think` (with gear suggestion based on constraints) or `/plan` (if trivial)
+- `/scope` → `/think` (with gear suggestion based on constraints; if problem is new → DISCOVER gear) or `/plan` (if trivial)
 - `/think` → `/challenge` (stress-test) or `/plan` (low-risk)
 - `/challenge` proceed → `/plan` with mitigations | reconsider → back to `/think`
 - `/plan` → implement step 1
