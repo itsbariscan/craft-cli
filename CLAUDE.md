@@ -30,7 +30,7 @@ After each skill completes, recommend the next:
 - `/plan` → implement step 1
 - `/debug` → test-writer agent (regression test) → `/review`
 - `/review` clean → `/ship` | criticals → fix then re-review
-- `/ship` → `/qa <deployed-url>`
+- `/ship` → `/document-release` (sync docs) + `/qa <deployed-url>`
 - `/qa` → `/debug` (if issues) or close loop
 
 ## Context Passing
@@ -47,6 +47,7 @@ Skills share state via `.craft/context/` with YAML frontmatter. Always check for
 | `/eval` | `eval.md` | `/ship` |
 | `/debug` | `postmortem.md` | `/review`, test-writer agent |
 | `/qa` | `qa-report.md` | `/debug` |
+| `/document-release` | `docs-release.md` | — |
 
 Key frontmatter decisions:
 - `/plan` reads `challenge.md` → if `verdict: reconsider`, warn before planning; if `proceed_with_mitigations`, add each mitigation as a plan step
